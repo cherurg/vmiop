@@ -1,0 +1,265 @@
+<!doctype html>
+
+<html>
+
+<head>
+	<meta charset = 'utf-8'/>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<title>Последовательности</title>
+	<link rel="stylesheet" type="text/css" href="katex/katex.min.css">
+	<link rel='stylesheet' href='Eulerface-master/css/eulerface_select.css' media='screen' />
+	<style>
+		.stest { width: 15em; }
+		body { height: 100%; }
+	</style>
+</head>
+
+<body lang = 'en'>	
+	<select id = 'secSelect' class = 'stest'>
+		
+	</select>
+    <input type="checkbox" id="check1"><label for="check1">Анимация</label>
+    <input type="checkbox" id="check2"><label for="check2">Логарифмическая шкала</label>
+    <input type="checkbox" id ="check3"><label for="check3">Отрезки</label>
+	<div id = 'rational-surjection' class = "formulae-katex">
+		\{ \frac{1}{2}, \frac{1}{3}, \frac{2}{3}, ... \}
+	</div>
+	<div id = 'limited-divergent' class = "formulae-katex">
+		\{ (-1)^n(1+ \frac{1}{n}) \}
+	</div>
+	<div id = 'rational-injection' class = "formulae-katex">
+		\{\frac{a_{\frac{n}{2}-1}}{a_{\frac{n-1}{2}-1}+a_{\frac{n-1}{2}}}\}_{a_1=a_2=1}
+	</div>
+	<div id = 'nepernumber' class = 'formulae-katex'>
+		\lim (1+\frac{1}{n})^n = \sum \frac{1}{n!}
+	</div>
+	<div id = 'neperdivergent' class = 'formulae-katex'>
+		(-1)^n(1+\frac{1}{n})
+	</div>
+	<div id = 'sin' class = 'formulae-katex'>
+		\sin (n)
+	</div>
+	<div id = 'infinitesimal' class = 'formulae-katex'>
+		\frac{(-1)^n}{n}
+	</div>
+	<div id = 'limitpoints' class = 'formulae-katex'>
+		\{\frac{1}{1}-\frac{1}{1}, \frac{1}{1}-\frac{1}{2},\frac{1}{2}-\frac{1}{2},\frac{1}{1}-\frac{1}{3}... \}
+	</div>
+	<div id = '14' class = "formulae-katex">
+		\frac{2}{\sqrt{n}} - \frac{n}{n+5}\sin{\frac{\pi n}{4}}
+	</div>
+	<div id = '15' class = "formulae-katex">
+		(-1)^n n^{\frac{1}{n}} + \frac{2n+6}{n}\cos{\frac{\pi n}{5}}
+	</div>
+	<div id = '16' class = "formulae-katex">
+		(\cos(\frac{\pi n}{4}))^{n+1} + \frac{n}{n+10} \sin(\frac{\pi n}{3})
+	</div>
+	<div id = 'output'>
+	</div>
+	<script type="text/javascript" src="jquery/jquery-2.1.3.js"></script>
+    <script src="dist/js/SkeletonWithControl.js"></script>
+    <script src = "katex/katex.min.js" type ="text/javascript"></script>
+	<script src = 'Eulerface-master/js/select.js'></script>
+	<script src = 'Eulerface-master/sequences/rationalsurjection.js' type = "text/javascript"></script>
+	<script src = 'Eulerface-master/sequences/limiteddivergent.js' type = "text/javascript"></script>
+	<script src = 'Eulerface-master/sequences/rationalinjection.js' type = "text/javascript"></script>
+	<script src = 'Eulerface-master/sequences/nepernumber.js' type = "text/javascript"></script>
+	<script src = 'Eulerface-master/sequences/neperdiverent.js' type = "text/javascript"></script>
+	<script src = 'Eulerface-master/sequences/limitpoints.js' type = "text/javascript"></script>
+	<div id="plot"></div>
+	<script>
+    var currentfunc;
+    var lineColorMap = [0, 2, 4, 6, 8];
+    var pointColorMap = [1, 3, 5, 7, 9];
+    function ident(y)
+    {
+        return y;
+    }
+    function ln(y)
+    {
+        return Math.log(y);
+    }
+    function draw(Left, Right, Top, Bottom,joint)
+    {
+        var animationFlag = document.getElementById("check1").checked;
+        var logFlag = document.getElementById("check2").checked;
+        var intFlag = document.getElementById("check3").checked;
+        var c = new PlotContainer('plot');
+        var controls = new app.Controls(c.addEmptyDiv());
+        var x = ident;
+        if(logFlag)
+        {
+            x = ln;
+        }
+        if(intFlag)
+        {
+            var plotter = c.addPlot({left: Bottom, right: Top, top: 1.5, bottom: -1.5, width:$(document).width()*0.9 , zoom: false});
+            if(animationFlag)
+            {
+                var tmp = 1;
+                var time = 1;
+                var step = Right/250;
+                var interval = setInterval(function() {
+                    (function(i) {
+                        for(var q = step*(i-1); q < Math.min(Right, step*i); ++q)
+                            for(var id = 0; id < currentfunc.length; ++id)
+                                plotter.addLine(currentfunc[id](q),-0.5,currentfunc[id](q),0.5,{size: 'tiny', color:lineColorMap[id]});
+                    })(tmp);
+                    tmp++;
+                    if(tmp >= 250)
+                        clearInterval(interval);
+                },time);
+            }
+            else
+            {
+                for(var i = 1; i < Right; ++i)
+                {
+                    for(var id = 0; id < currentfunc.length; ++id)
+                        plotter.addLine(currentfunc[id](i),-0.5,currentfunc[id](i),0.5,{size: 'tiny',color: lineColorMap[id]});
+                }
+            }
+        }
+        else
+        {
+            var plotter = c.addPlot({left: Left, right: x(Right), top: Top, bottom: Bottom, width:$(document).width()*0.9 , zoom: false});
+            if(animationFlag)
+            {
+                var tmp = 1
+                var time = 1;
+                var step;
+                if(Right < 500)
+                {
+                    step = Right/100;
+                }
+                else
+                {
+                    step = Right/250;   
+                }
+                var interval = setInterval(function() {
+                    (function (i) {
+                        for(var q = step*(i-1); q < Math.min(Right, step*i); ++q)
+                            for(var id = 0; id < currentfunc.length; ++id)
+                            {
+                                if(q != 0)
+                                {
+                                    if(joint)
+                                    {
+                                        plotter.addPoint(x(q), currentfunc[id](q), {size: 'small', color: pointColorMap[id]});
+                                        plotter.addLine(x(q),currentfunc[id](q),x(q+1),currentfunc[id](q+1),{size:'tiny', color: lineColorMap[id]});
+                                    }
+                                    else
+                                    {
+                                        plotter.addPoint(x(q), currentfunc[id](q), {size: 'tiny', color: pointColorMap[id]});
+                                    }
+                                }
+                            }
+                        })(tmp);
+                        tmp++;        
+				        if (tmp >= 250)
+                            clearInterval(interval);
+                    },time);
+                }
+                else
+                {
+					   for(var i = 1; i <= Right; ++i)
+					   {
+                            for(var id = 0; id < currentfunc.length; ++id)
+                            {
+                                if(joint)
+                                {
+                                    plotter.addLine(x(i),currentfunc[id](i),x(i+1),currentfunc[id](i+1),{size: 'tiny', color: lineColorMap[id]});
+                                    plotter.addPoint(x(i),currentfunc[id](i),{size: 'small', color: pointColorMap[id]});
+                                }
+                                else
+                                {
+                                    plotter.addPoint(x(i),currentfunc[id](i),{size: 'tiny', color: pointColorMap[id]});
+                                }
+                            }
+                        }
+                }
+        }
+    }
+    function Update() {
+			var state = selectContainer.getAttribute('value');
+			switch(state)
+			{
+				case 'RS':
+                    currentfunc = [rationalSurjection];
+                    draw(0,1000,1,0,false);
+					break;
+				case 'LD':
+                    currentfunc = [limitedDivergent];
+                    draw(0,1000,3,-3,false);
+					break;
+				case 'RI':
+                    currentfunc = [rationalInjection];
+                    draw(0,1000,1,0,false);
+					break;
+				case 'ne':
+                    currentfunc = [neperDef, neperSeries];
+                    draw(0,100,3,0,true);
+					break;
+				case 'nd':
+                    currentfunc = [neperDivergent];
+                    draw(0,1000,3,-3,false);
+					break;
+				case 'SI':
+                    currentfunc = [Math.sin];
+                    draw(0,10000,1.5,-1.5,false);
+				    break;
+				case 'It':
+                    currentfunc = [function(x){return Math.pow(-1,x)/x;}];
+                    draw(0,300,1.4,-1.4,true);
+					break;
+				case 'LP':
+                    currentfunc = [limitedPoints];
+                    draw(0,2000,1,0,false);
+					break;
+				case '14':
+                    currentfunc = [function(x){return 2/Math.sqrt(x) - (x)/(x+5)*Math.sin(Math.PI*x/4);}];
+                    draw(0,1000,2,-1,true);
+					break;
+				case '15':
+                    currentfunc = [function(n){return Math.pow(-1,n)*Math.pow(n,1/n)+(2*n+6)/n*Math.cos(Math.PI*n/5);}];
+                    draw(0,1000,5,-5,true);
+					break;
+				case '16':
+                    currentfunc = [function(n){return Math.pow(Math.cos(Math.PI*n/4),n+1)+n/(n+10)*Math.sin(Math.PI*n/3);}];
+                    draw(0,1000,5,-5,true);
+					break;
+			}
+		}
+	var adress = $('.formulae-katex');
+	for(var i = 0; i < adress.length; ++i)
+	{
+	    katex.render(adress[i].innerHTML,adress[i]);
+	}
+        var animationCheckBox = document.getElementById('check1');
+        var logCheckBox = document.getElementById('check2');
+        var intCheckBox = document.getElementById('check3')
+		var customSelect = new eulerface.Select(document.getElementById('secSelect')),
+			output = document.getElementById('output'),
+			selectContainer = document.getElementById('secSelect');
+		customSelect.addOption(document.getElementById('rational-surjection'), 'RS');
+		customSelect.addOption(document.getElementById('limited-divergent'),'LD');
+		
+		customSelect.addOption(document.getElementById('rational-injection'), 'RI');
+		//curr.setAttribute("onmouseover", function(){this.setAttribute('style', 'color: red');})
+		customSelect.addOption(document.getElementById('nepernumber'),'ne');
+		customSelect.addOption(document.getElementById('neperdivergent'),'nd');
+		customSelect.addOption(document.getElementById('sin'),'SI');
+		customSelect.addOption(document.getElementById('limitpoints'),'LP');
+		customSelect.addOption(document.getElementById('infinitesimal'), 'It');
+		customSelect.addOption(document.getElementById('14'), '14');
+		customSelect.addOption(document.getElementById('15'), '15');
+		customSelect.addOption(document.getElementById('16'), '16');
+		selectContainer.addEventListener('change', Update);
+        animationCheckBox.addEventListener('change', Update);
+        logCheckBox.addEventListener('change', Update);
+        intCheckBox.addEventListener('change', Update);
+	</script>
+</body>
+
+</html>
