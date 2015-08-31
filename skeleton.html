@@ -1,18 +1,33 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>Документация библиотеки Skeleton.js</title>
-  <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css"/>
-  <link href="css/LayoutShortMaterialize.css" rel="stylesheet"/>
+    <title>VisualMath.ru</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="/materialize/css/materialize.min.css"/>
+    <link href="/css/LayoutShortMaterialize.css" rel="stylesheet"/>
 </head>
-<body class="container">
-  <div id="readme" class="boxed-group flush clearfix announce instapaper_body md">
-    <h2>
-      Документация библиотеки Skeleton.js
-    </h2>
+<body>
+<header>
+    <nav class="top-nav light-blue darken-1">
+        <div class="nav-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <a href="/" class="brand-logo">Визуализация объектов высокого уровня абстракции</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
 
-    <article class="markdown-body entry-content" itemprop="mainContentOfPage"><p>Сейчас скелетон еще разрабатывается, поэтому я не могу обещать, что интерфейс сохранится в следующих коммитах.
+
+<div id="readme" class="boxed-group flush clearfix announce instapaper_body md">
+  <h2 class="container">
+    Документация библиотеки Skeleton.js
+  </h2>
+
+  <article class="markdown-body entry-content container" itemprop="mainContentOfPage"><p>Сейчас скелетон еще разрабатывается, поэтому я не могу обещать, что интерфейс сохранится в следующих коммитах.
 Эта документация <strong>актуальна для версии 0.0.5</strong>. Проверить версию можно так: <code>Plotter.version</code></p>
 
 <p><code>Plotter</code> -- основной объект. Он отвечает за прорисовку графика и всех объектов, которые на нем находятся.
@@ -37,7 +52,7 @@
 <p>Функции-рисовалки -- главное, что есть у <code>Plotter</code>, и основная фишка библиотеки. С помощью них можно много рисовать, но писать мало кода. Пример вызова функции, которая нарисует график sin(x):</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> func <span class="pl-k">=</span> plotter.<span class="pl-c1">addFunc</span>(<span class="pl-k">function</span> (<span class="pl-smi">x</span>) {
-    <span class="pl-k">return</span> <span class="pl-c1">Math</span>.<span class="pl-c1">sin</span>(x);
+  <span class="pl-k">return</span> <span class="pl-c1">Math</span>.<span class="pl-c1">sin</span>(x);
 }, options);</pre></div>
 
 <p>Существуют методы для добавления закрашенной области, линии, точки и функции. Каждый метод возвращает объект. у которого есть методя для его модификации. Например, <code>Plotter.addFunc</code> вернет объект функции, у которого можно будет поменять цвет, границы прорисовки, точность, толщину, точки разрыва и даже саму функцию. </p>
@@ -64,7 +79,7 @@
 <p>Вот построена функци и получен объект типа <code>Func</code>:</p>
 
 <div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> func <span class="pl-k">=</span> plotter.<span class="pl-c1">addFunc</span>(<span class="pl-k">function</span> (<span class="pl-smi">x</span>) {
-    <span class="pl-k">return</span> x;
+  <span class="pl-k">return</span> x;
 });</pre></div>
 
 <p>Можно, например, поменять цвет:</p>
@@ -211,19 +226,19 @@ func.Color();   //вызов .Color() без аргументов просто �
 <p>Строит произвльную закрашенную область на графике. Для построения нужно передать в качестве первого аргумента массив точек. Каждая точка - это объект, у которого есть два поля: x и y.</p>
 
 <div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> arr <span class="pl-k">=</span> [];
-    arr.<span class="pl-c1">push</span>({
-        x<span class="pl-k">:</span> <span class="pl-c1">0</span>,
-        y<span class="pl-k">:</span> <span class="pl-c1">0</span>
-    });
-    arr.<span class="pl-c1">push</span>({
-        x<span class="pl-k">:</span> <span class="pl-c1">1</span>,
-        y<span class="pl-k">:</span> <span class="pl-c1">0</span>
-    });
-    arr.<span class="pl-c1">push</span>({
-        x<span class="pl-k">:</span> <span class="pl-c1">0.5</span>,
-        y<span class="pl-k">:</span> <span class="pl-c1">1</span>
-    });
-    <span class="pl-k">var</span> area <span class="pl-k">=</span> Plotter.<span class="pl-c1">addArea</span>(arr);</pre></div>
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">0</span>
+  });
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">1</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">0</span>
+  });
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">0.5</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">1</span>
+  });
+  <span class="pl-k">var</span> area <span class="pl-k">=</span> Plotter.<span class="pl-c1">addArea</span>(arr);</pre></div>
 
 <p>Второй <em>необязательный</em> аргумент <code>.addLine</code> - объект с опциями. Можно менять следующие свойства:</p>
 
@@ -333,7 +348,7 @@ func.Color();   //вызов .Color() без аргументов просто �
 <p>Помимо рисования объектов, Plotter еще отвечает за учет всех созданных объектов. Если нужно удалить какой-нибудь, то нужно вызвать метод <code>.remove</code>:</p>
 
 <div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> point <span class="pl-k">=</span> plotter.<span class="pl-c1">addPoint</span>(<span class="pl-c1">1</span>, <span class="pl-c1">1</span>);
-    plotter.<span class="pl-c1">remove</span>(point);</pre></div>
+  plotter.<span class="pl-c1">remove</span>(point);</pre></div>
 
 <p>В некоторых случаях может помочь вызов методов <code>Plotter.draw()</code> или, что то же самое, <code>Plotter.redraw()</code>. В текущей версии их использовать не нужно.
 Также можно узнать id элемента, к которому привязан график: <code>Plotter.getID()</code></p>
@@ -353,7 +368,7 @@ html-код.</p>
 
 <div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> container <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PlotContainer</span>(<span class="pl-s"><span class="pl-pds">"</span>plot<span class="pl-pds">"</span></span>);
 
-    <span class="pl-k">var</span> plotter <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>();</pre></div>
+  <span class="pl-k">var</span> plotter <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>();</pre></div>
 
 <p>Второй график можно создать также, как и первый:</p>
 
@@ -362,16 +377,31 @@ html-код.</p>
 <p>Кроме того, в метод можно передавать опции, как это делает с конструктором Plotter:</p>
 
 <div class="highlight highlight-javascript"><pre> <span class="pl-k">var</span> plotter3 <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>({
-   width<span class="pl-k">:</span> <span class="pl-c1">400</span>,
-   height<span class="pl-k">:</span> <span class="pl-c1">400</span>
-  });</pre></div>
+width<span class="pl-k">:</span> <span class="pl-c1">400</span>,
+height<span class="pl-k">:</span> <span class="pl-c1">400</span>
+});</pre></div>
 
 <h1><a id="user-content-Примеры" class="anchor" href="#Примеры" aria-hidden="true"><span class="octicon octicon-link"></span></a>Примеры</h1>
 
 <p>Их можно посмотреть в папке scripts. В index.html можно менять имя подключаемого файла, чтобы смотреть разные примеры.</p>
 </div></article>
-  </div>
-  <script src="js/jquery-2.1.4.min.js"></script>
-  <script src="materialize/js/materialize.min.js"></script>
+
+<footer class="page-footer light-blue lighten-3">
+    <div class="container">
+        <div class="row">
+            <div class="col offset-l1 l5 m8 s12">
+                <img class="responsive-img" src="img/hselogo.jpg"/>
+            </div>
+            <div class="col l5 offset-l1 m4 s12">
+                <p>
+                    Проект разрабатывается преподавателями, сотрудниками и
+                    студентами НИУ ВШЭ.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="/js/jquery-2.1.4.min.js"></script>
+<script src="/materialize/js/materialize.min.js"></script>
 </body>
 </html>
