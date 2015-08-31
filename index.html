@@ -3,8 +3,8 @@
 <head>
     <title>VisualMath.ru</title>
     <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
-    <link rel="stylesheet" type="text/css" href="materialize/css/materialize.min.css"/>
-    <link href="css/LayoutShortMaterialize.css" rel="stylesheet"/>
+    <link rel="stylesheet" type="text/css" href="/materialize/css/materialize.min.css"/>
+    <link href="/css/LayoutShortMaterialize.css" rel="stylesheet"/>
 </head>
 <body>
 <header>
@@ -12,8 +12,8 @@
         <div class="nav-wrapper">
             <div class="container">
                 <div class="row">
-                    <div class="col offset-s1">
-                        <a href="/" class="brand-logo">VisualMath.ru</a>
+                    <div class="col">
+                        <a href="/" class="brand-logo"></a>
                     </div>
                 </div>
             </div>
@@ -28,6 +28,10 @@
     <form clientValidation="false">
         <div class="row">
             <div class="col l9 s12">
+              <h4>
+                Разработка и внедрение в учебный процесс
+                   инструментов визуализации объектов высокого уровня абстракции
+              </h4>
                 <p>
                     Проект выиграл в Конкурсе Инициативных Образовательных
                     Проектов, проводимый НИУ ВШЭ.
@@ -39,33 +43,20 @@
                     <a href="http://academics.hse.ru/kr/contest/iop">здесь</a>.
                 </p>
                 <h5>
-                    <a href="img/presentation.pdf">Посмотреть презентацию</a>
+                    <a href="img/presentation.pdf">Посмотреть презентацию Проекта</a>
                 </h5>
+                <br/>
+                <p>
+                    В рамках Проекта были разработаны инструменты для построения визуальных модулей.
+                    <ul>
+                      <li><a href="skeleton.html">Документация Skeleton.js</a></li>
+                      <li><a href="downloads/skeleton.zip">Исходные коды Skeleton.js</a></li>
+                    </ul>
+                    <a href="downloads/grafar.zip">Исходные коды Grafar.js</a>
+                </p>
             </div>
             <div class="col l3 offset-s2 s8">
                 <div class="col s12">
-                   <!--  <div class="row">
-                       <div class="input-field col s12">
-                           <textfield value="login"
-                                        id="login"
-                                        type="text"
-                                        class="validate"
-                                        validate="required"
-                                        placeholder="Логин"/>
-                           <label for="login">Логин</label>
-                       </div>
-                   </div>
-                   <div class="row">
-                       <div class="input-field col s12">
-                           <passwordfield value="password"
-                                            id="password"
-                                            type="password"
-                                            class="validate"
-                                            validate="required"
-                                            placeholder="Пароль"/>
-                           <label for="password">Пароль</label>
-                       </div>
-                   </div> -->
                     <a class="btn light-blue accent-4" href="http://www.visualmath.ru">Войти</a>
                 </div>
             </div>
@@ -88,7 +79,7 @@
         </div>
     </div>
 </footer>
-<script src="js/jquery-2.1.4.min.js"></script>
-<script src="materialize/js/materialize.min.js"></script>
+<script src="/js/jquery-2.1.4.min.js"></script>
+<script src="/materialize/js/materialize.min.js"></script>
 </body>
 </html>
