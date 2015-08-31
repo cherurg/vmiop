@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>VisualMath.ru</title>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="/materialize/css/materialize.min.css"/>
+    <link href="/css/LayoutShortMaterialize.css" rel="stylesheet"/>
+</head>
+<body>
+<header>
+    <nav class="top-nav light-blue darken-1">
+        <div class="nav-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <a href="/" class="brand-logo">Визуализация объектов высокого уровня абстракции</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
+
+
+<div id="readme" class="boxed-group flush clearfix announce instapaper_body md">
+  <h2 class="container">
+    Документация библиотеки Skeleton.js
+  </h2>
+
+  <article class="markdown-body entry-content container" itemprop="mainContentOfPage"><p>Сейчас скелетон еще разрабатывается, поэтому я не могу обещать, что интерфейс сохранится в следующих коммитах.
+Эта документация <strong>актуальна для версии 0.0.5</strong>. Проверить версию можно так: <code>Plotter.version</code></p>
+
+<p><code>Plotter</code> -- основной объект. Он отвечает за прорисовку графика и всех объектов, которые на нем находятся.
+Для создания графика нужно передать в качестве первого аргумента в конструктор <code>Plotter</code> id DOM-элемента, где дальше будет отрисовываться график. </p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> plotter <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Plotter</span>(<span class="pl-s"><span class="pl-pds">"</span>plot<span class="pl-pds">"</span></span>, options);</pre></div>
+
+<p>Второй <em>необязательный</em> аргумент конструктора <code>Plotter</code> <code>options</code> -- это объект, в котором можно менять некоторые свойства <code>Plotter</code>. Вот они, а также их значения по-умолчанию:</p>
+
+<ul>
+<li><strong>left: -10</strong>, левая граница графика</li>
+<li><strong>right: 10</strong>, правая граница графика</li>
+<li><strong>bottom: -5</strong>, нижняя граница графика</li>
+<li><strong>top: 5</strong>, верхняя граница графика</li>
+<li><strong>width: 800</strong>, ширина графика в пикселях</li>
+<li><strong>height: 600</strong>, высота графика в пикселях</li>
+<li><strong>stroke: "#000000"</strong>, цвет рамки графика</li>
+</ul>
+
+<p>Есть еще несколько других свойств, которые я намеренно не перечисляю. Какие-то из них лучше не трогать, а изменение других может привести к падению программы.</p>
+
+<p>Функции-рисовалки -- главное, что есть у <code>Plotter</code>, и основная фишка библиотеки. С помощью них можно много рисовать, но писать мало кода. Пример вызова функции, которая нарисует график sin(x):</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> func <span class="pl-k">=</span> plotter.<span class="pl-c1">addFunc</span>(<span class="pl-k">function</span> (<span class="pl-smi">x</span>) {
+  <span class="pl-k">return</span> <span class="pl-c1">Math</span>.<span class="pl-c1">sin</span>(x);
+}, options);</pre></div>
+
+<p>Существуют методы для добавления закрашенной области, линии, точки и функции. Каждый метод возвращает объект. у которого есть методя для его модификации. Например, <code>Plotter.addFunc</code> вернет объект функции, у которого можно будет поменять цвет, границы прорисовки, точность, толщину, точки разрыва и даже саму функцию. </p>
+
+<h3><a id="user-content-Методы-plotter" class="anchor" href="#Методы-plotter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Методы Plotter</h3>
+
+<p>О конструкторе Plotter я уже рассказал.Теперь я расскажу о том, что делать с объектом, которые возвращает конструктор. У него есть несколько методов:</p>
+
+<h5><a id="user-content-plotteraddfuncfunction-object" class="anchor" href="#plotteraddfuncfunction-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plotter.addFunc(Function, Object)</h5>
+
+<p>Первый аргумент - это функция, которую нужно нарисовать. Второй <em>необязательный</em> аргумент - это объект, в котором можно менять некоторые свойства.</p>
+
+<ul>
+<li> <strong>accuracy: Plotter.width</strong>, точность прорисовки графика. По-умолчанию равна ширине графика в пикселях. Количество точек, по которым строится график.</li>
+<li> <strong>strokeWidth: 2</strong>, толщина линии графика</li>
+<li> <strong>color: 0</strong>, цвет. Нулевой цвет -- это синий.  Если менять это свойство вручную, без вызова метода setColor, то нужно указывать цвет в формате rgb. Первый символ должен быть решеткой, а дальше следуют 6 шестнадцатиричныных цирф: <code>"#FF0000"</code> - красный. Лучше не менять это свойство напрямую, а использовать сеттер, так как в нем можно выбрать цвет из заранее заданного набора.</li>
+<li> <strong>breaks: []</strong>, массив точек разрыва. Когда строится график функции, у которой есть разрывы, то здесь их нужно указать. Например, у графика сигнума точкой разрыва будет 0. Такая же точка разрыва будет у гиперболы и у графика sin(x)/x.</li>
+<li> <strong>left: null</strong>, левая граница прорисовки. Левее нее график никогда не будет рисоваться. <code>null</code> означает, что границы нет.</li>
+<li> <strong>right: null</strong>, правая граница прорисовки. Правее нее график никогда не будет рисоваться. <code>null</code> означает, что границы нет.</li>
+</ul>
+
+<h5><a id="user-content-Методы-func" class="anchor" href="#Методы-func" aria-hidden="true"><span class="octicon octicon-link"></span></a>Методы Func</h5>
+
+<p>Вот построена функци и получен объект типа <code>Func</code>:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-k">var</span> func <span class="pl-k">=</span> plotter.<span class="pl-c1">addFunc</span>(<span class="pl-k">function</span> (<span class="pl-smi">x</span>) {
+  <span class="pl-k">return</span> x;
+});</pre></div>
+
+<p>Можно, например, поменять цвет:</p>
+
+<div class="highlight highlight-javascript"><pre>func.<span class="pl-c1">setColor</span>(<span class="pl-c1">7</span>);   <span class="pl-c">//поменяет цвет на красный.</span></pre></div>
+
+<p>Можно получить цвет:</p>
+
+<div class="highlight highlight-javascript"><pre>func.<span class="pl-c1">getColor</span>();    <span class="pl-c">//"#d62728" -- тот, который был установлен. Цвет всегда возвращается в формате rgb.</span></pre></div>
+
+<p>Можно делать и то, и другое с помощью одного метода:</p>
+
+<pre lang="javacript"><code>func.Color(9);  //вызов .Color() с аргументом поменяет цвет. Сейчас был установлен фиолетовый.
+func.Color();   //вызов .Color() без аргументов просто вернет текущий цвет. Будет возвращен rgb-код фиолетового: "#9467bd".
+</code></pre>
+
+<p>Я показал примеры использования методов Func. Какие вообще методы у него есть? </p>
+
+<ul>
+<li><strong>Func.getAccuracy()</strong>, вернет текущую точность прорисовки</li>
+<li><strong>Func.setAccuracy(Number)</strong>, установит указанную точность прорисовки. Число должно быть целым.</li>
+<li><strong>Func.Accuracy(Number)</strong>, если передать <em>необязательный</em> аргумент, то установит точность прорисовки. Если не указывать, то вернет текущую точность прорисовки.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getStrokeWidth()</strong>, вернет текущую толщину линии графика.</li>
+<li><strong>Func.setStrokeWidth(Number)</strong>, установит указанную толщину.</li>
+<li><strong>Func.StrokeWidth(Number)</strong>, если передать <em>необязательный</em> аргумент, то установит толщину. Если не указывать, то вернет текущую толщину.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getColor()</strong>, вернет текущий цвет в формате rgb.</li>
+<li><strong>Func.setColor(Number or String)</strong>, установит указанный цвет. Если передавать строку, то она должна быть в формате rgb, то есть первый символ - решетка, а дальше 6 шестандцатиричных цифр. Если передавать число, то оно может быть от 0 до 20 включительно. 20 соответствует черному цвету. Остальные номера соответсвуют этим цветам: <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20</a></li>
+<li><strong>Func.Color(Number or String)</strong>, аргумент необязателен. Если он есть, тобудет установлен указанный цвет, как в <code>.setColor(Number or String)</code>. Если его нет, то будет возвращен текущий цвет в формате rgb.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getColour()</strong>, алиас для <code>.getColor()</code></li>
+<li><strong>Func.setColour(Number or String)</strong>, алиас для <code>.setColor(Number or String)</code></li>
+<li><strong>Func.Colour(Number or String)</strong>, алиас для <code>.Color(Number or String)</code></li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getBreaks()</strong>, вернет массив точек разрыва. Модификации в этом массиве приведут к изменениям в массиве внутри объекта. Иначе говоря, копия не создается. При необходимости копию можно создать с помощью <code>var newArr = _.clone(arr);</code>. В сборку скелетона уже включен lodash 2.4.1, набор утилит для js. Подробнее: <a href="https://lodash.com/">https://lodash.com/</a></li>
+<li><strong>Func.setBreaks(Array)</strong>, установит указанный массив точек разрыва. Копия при этом создаваться не будет. </li>
+<li><strong>Func.Breaks(Array)</strong>, если <em>необязательный</em> аргумент указан, то установит новый массив точек разрыва. Если нет, то вернет текущий массив.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getLeft()</strong>, вернет левую границу прорисовки.</li>
+<li><strong>Func.setLeft(Number)</strong>, установит левую границу прорисовки.</li>
+<li><strong>Func.Left(Number)</strong>, если <em>необязательный</em> аргумент указан, то установит левую границу прорисовки. Иначе вернет текущую.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getRight()</strong>, вернет правую границу прорисовки.</li>
+<li><strong>Func.setRight(Number)</strong>, установит правую границу прорисовки.</li>
+<li><strong>Func.Right(Number)</strong>, если <em>необязательный</em> аргумент указан, то установит правую границу прорисовки. Иначе вернет текущую.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Func.getFunc()</strong>, вернет текущую функцию.</li>
+<li><strong>Func.setFunc(Function)</strong>, установит функцию.</li>
+<li><strong>Func.Func(Function)</strong>, если аргумент указан, то установит функцию. Если нет, то вернет текущую функцию.</li>
+</ul>
+
+<hr>
+
+<h5><a id="user-content-plotteraddlinex1-y1-x2-y2-object" class="anchor" href="#plotteraddlinex1-y1-x2-y2-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plotter.addLine(x1, y1, x2, y2, Object)</h5>
+
+<p>Первые четыре аргумента задают координаты двух точек, по которым будет строиться отрезок. Последний <em>необязательный</em> аргумент - это объект, в котором можно передавать опции. Слева указано имя свойства, а справа - его значение по-умолчанию.</p>
+
+<ul>
+<li><strong>strokeWidth: 2</strong>, толщина линии</li>
+<li><strong>color: 0</strong></li>
+</ul>
+
+<h5><a id="user-content-Методы-line" class="anchor" href="#Методы-line" aria-hidden="true"><span class="octicon octicon-link"></span></a>Методы Line</h5>
+
+<ul>
+<li><strong>Line.setX1(x1)</strong></li>
+<li><strong>Line.getX1()</strong></li>
+<li><strong>Line.X1(x1)</strong>, принимает <em>необязательный</em> аргумент. Если он задан, то устанавливает x1. Иначе возвращает текущее значение x1.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Line.setX2(x2)</strong></li>
+<li><strong>Line.getX2()</strong></li>
+<li><strong>Line.X2(x2)</strong>, принимает <em>необязательный</em> аргумент. Если он задан, то устанавливает x2. Иначе возвращает текущее значение x2.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Line.setY1(y1)</strong></li>
+<li><strong>Line.getY1()</strong></li>
+<li><strong>Line.Y1(y1)</strong>, принимает <em>необязательный</em> аргумент. Если он задан, то устанавливает y1. Иначе возвращает текущее значение y1.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Line.setY2(y2)</strong></li>
+<li><strong>Line.getY2()</strong></li>
+<li><strong>Line.Y2(y2)</strong>, принимает <em>необязательный</em> аргумент. Если он задан, то устанавливает y2. Иначе возвращает текущее значение y2.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Line.getColor()</strong>, вернет текущий цвет в формате rgb.</li>
+<li><strong>Line.setColor(Number or String)</strong>, установит указанный цвет. Если передавать строку, то она должна быть в формате rgb, то есть первый символ - решетка, а дальше 6 шестандцатиричных цифр. Если передавать число, то оно может быть от 0 до 20 включительно. 20 соответствует черному цвету. Остальные номера соответсвуют этим цветам: <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20</a></li>
+<li><strong>Line.Color(Number or String)</strong>, аргумент необязателен. Если он есть, тобудет установлен указанный цвет, как в <code>.setColor(Number or String)</code>. Если его нет, то будет возвращен текущий цвет в формате rgb.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Line.getColour()</strong>, алиас для <code>.getColor()</code></li>
+<li><strong>Line.setColour(Number or String)</strong>, алиас для <code>.setColor(Number or String)</code></li>
+<li><strong>Line.Colour(Number or String)</strong>, алиас для <code>.Color(Number or String)</code></li>
+</ul>
+
+<hr>
+
+<h5><a id="user-content-plotteraddareaarray-object" class="anchor" href="#plotteraddareaarray-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plotter.addArea(Array, Object)</h5>
+
+<p>Строит произвльную закрашенную область на графике. Для построения нужно передать в качестве первого аргумента массив точек. Каждая точка - это объект, у которого есть два поля: x и y.</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> arr <span class="pl-k">=</span> [];
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">0</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">0</span>
+  });
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">1</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">0</span>
+  });
+  arr.<span class="pl-c1">push</span>({
+      x<span class="pl-k">:</span> <span class="pl-c1">0.5</span>,
+      y<span class="pl-k">:</span> <span class="pl-c1">1</span>
+  });
+  <span class="pl-k">var</span> area <span class="pl-k">=</span> Plotter.<span class="pl-c1">addArea</span>(arr);</pre></div>
+
+<p>Второй <em>необязательный</em> аргумент <code>.addLine</code> - объект с опциями. Можно менять следующие свойства:</p>
+
+<ul>
+<li><strong>color: 20</strong>, цвет границы области. По-умолчанию черный.</li>
+<li><strong>fillOpacity: 0.2</strong>, прозрачность закраски области. Может меняться от 0 до 1, где 1 - непрозрачная, а 0 - полностью прозрачная, невидимая.</li>
+<li><strong>strokeWidth: 0</strong>, толщина границы области. По-молчанию толщина нулевая, то есть граница невидимая</li>
+<li><strong>fill: 1</strong>, цвет закраски области.</li>
+</ul>
+
+<h5><a id="user-content-Методы-area" class="anchor" href="#Методы-area" aria-hidden="true"><span class="octicon octicon-link"></span></a>Методы Area</h5>
+
+<ul>
+<li><strong>Area.getColor()</strong>, вернет текущий цвет в формате rgb.</li>
+<li><strong>Area.setColor(Number or String)</strong>, установит указанный цвет. Если передавать строку, то она должна быть в формате rgb, то есть первый символ - решетка, а дальше 6 шестандцатиричных цифр. Если передавать число, то оно может быть от 0 до 20 включительно. 20 соответствует черному цвету. Остальные номера соответсвуют этим цветам: <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20</a></li>
+<li><strong>Area.Color(Number or String)</strong>, аргумент необязателен. Если он есть, тобудет установлен указанный цвет, как в <code>.setColor(Number or String)</code>. Если его нет, то будет возвращен текущий цвет в формате rgb.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Area.getColour()</strong>, алиас для <code>.getColor()</code></li>
+<li><strong>Area.setColour(Number or String)</strong>, алиас для <code>.setColor(Number or String)</code></li>
+<li><strong>Area.Colour(Number or String)</strong>, алиас для <code>.Color(Number or String)</code></li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Area.setFill(Number or String)</strong>, устанавливает цвет заливки области. Работает также, как и <code>.setColor</code></li>
+<li><strong>Area.getFill()</strong>, возвращает цвет заливки области</li>
+<li><strong>Area.Fill(String or Number)</strong>, принимает <em>необязательный</em> аргумент. Если он есть, то устанавливает указанный цвет, иначе возвращает текущий цвет.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Area.setFillOpacity(Number)</strong>, принимает число от 0 до 1 и устанавливает указанную прозрачность заливки.</li>
+<li><strong>Area.getFillOpacity()</strong>, возвращает текущую прозрачность заливки.</li>
+<li><strong>Area.FillOpacity(Number)</strong>, принимает <em>необязательный</em> аргумент. Если он есть, то устанваливает указанную прозрачность, иначе возвращает текущую.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Area.getStrokeWidth()</strong>, вернет текущую толщину границы области.</li>
+<li><strong>Area.setStrokeWidth(Number)</strong>, установит указанную толщину.</li>
+<li><strong>Area.StrokeWidth(Number)</strong>, если передать <em>необязательный</em> аргумент, то установит толщину. Если не указывать, то вернет текущую толщину.</li>
+</ul>
+
+<hr>
+
+<h5><a id="user-content-plotteraddpointx-y-object" class="anchor" href="#plotteraddpointx-y-object" aria-hidden="true"><span class="octicon octicon-link"></span></a>Plotter.addPoint(x, y, Object)</h5>
+
+<p>Рисует точку по указанным координатам. Третьеим <em>необязательным</em> аргументом можно передать некоторые свойства:</p>
+
+<ul>
+<li> <strong>movable: false</strong>, можно ли точку перетаскивать мышкой. По-умолчанию нельзя.</li>
+<li> <strong>color: 6</strong></li>
+<li> <strong>size: 3</strong>, размер точки</li>
+</ul>
+
+<h5><a id="user-content-Методы-point" class="anchor" href="#Методы-point" aria-hidden="true"><span class="octicon octicon-link"></span></a>Методы Point</h5>
+
+<ul>
+<li><strong>Point.setSize(size)</strong>, меняет размер точки. Можно передать либо неотрицательное число, либо одну из четырех строк: "large", "medium", "small", "tiny".</li>
+<li><strong>Point.getSize()</strong>, возвращает текущий размер</li>
+<li><strong>Point.Size(size)</strong>, принимает <em>необязательный</em> аргумент. Если он есть, то устанавливает размер, иначе возвращает текущий размер.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Point.getX()</strong></li>
+<li><strong>Point.setX(x)</strong></li>
+<li><strong>Point.X(x)</strong>, аргумент необязательный.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Point.getY()</strong></li>
+<li><strong>Point.setY(y)</strong></li>
+<li><strong>Point.Y(y)</strong>, аргумент необязательный.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Point.getColor()</strong>, вернет текущий цвет в формате rgb.</li>
+<li><strong>Point.setColor(Number or String)</strong>, установит указанный цвет. Если передавать строку, то она должна быть в формате rgb, то есть первый символ - решетка, а дальше 6 шестандцатиричных цифр. Если передавать число, то оно может быть от 0 до 20 включительно. 20 соответствует черному цвету. Остальные номера соответсвуют этим цветам: <a href="https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20">https://github.com/mbostock/d3/wiki/Ordinal-Scales#category20</a></li>
+<li><strong>Point.Color(Number or String)</strong>, аргумент необязателен. Если он есть, тобудет установлен указанный цвет, как в <code>.setColor(Number or String)</code>. Если его нет, то будет возвращен текущий цвет в формате rgb.</li>
+</ul>
+
+<hr>
+
+<ul>
+<li><strong>Point.getColour()</strong>, алиас для <code>.getColor()</code></li>
+<li><strong>Point.setColour(Number or String)</strong>, алиас для <code>.setColor(Number or String)</code></li>
+<li><strong>Point.Colour(Number or String)</strong>, алиас для <code>.Color(Number or String)</code></li>
+</ul>
+
+<hr>
+
+<h5><a id="user-content-Остальные-методы-plotter" class="anchor" href="#Остальные-методы-plotter" aria-hidden="true"><span class="octicon octicon-link"></span></a>Остальные методы Plotter</h5>
+
+<p>Помимо рисования объектов, Plotter еще отвечает за учет всех созданных объектов. Если нужно удалить какой-нибудь, то нужно вызвать метод <code>.remove</code>:</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> point <span class="pl-k">=</span> plotter.<span class="pl-c1">addPoint</span>(<span class="pl-c1">1</span>, <span class="pl-c1">1</span>);
+  plotter.<span class="pl-c1">remove</span>(point);</pre></div>
+
+<p>В некоторых случаях может помочь вызов методов <code>Plotter.draw()</code> или, что то же самое, <code>Plotter.redraw()</code>. В текущей версии их использовать не нужно.
+Также можно узнать id элемента, к которому привязан график: <code>Plotter.getID()</code></p>
+
+<h1><a id="user-content-plotcontainer-несколько-графиков-на-одной-странице" class="anchor" href="#plotcontainer-несколько-графиков-на-одной-странице" aria-hidden="true"><span class="octicon octicon-link"></span></a>PlotContainer, несколько графиков на одной странице</h1>
+
+<p>Как и Plotter, PlotContainer является глобальным объектом. Он служит для того, чтобы DOM-элемент с указанным ID работал в качестве контейнера для других DOM-элементов, которые, в свою очередь могут содержать либо графики, либо произвольный
+html-код.</p>
+
+<p>Проще говорить, что PlotContainer - это контейнер, который хранит в себе несколько Plotter'ов.</p>
+
+<p><code>Plotter PlotContainer.addPlot(options)</code> добавляет в DOM-контейнер график и возвращает его. Возвращает то же самое, что и конструктор Plotter. Опции те же самые, что и у Plotter.</p>
+
+<p><code>DOM_ID PlotContainer.addEmptyDiv()</code> создает в контейнере пустой </p><div> и возвращает его ID. Можно использовать, например, для дальнейшей работы с Controls.<p></p>
+
+<p>Инициализация контейнера и создание графика в нем:</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> container <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">PlotContainer</span>(<span class="pl-s"><span class="pl-pds">"</span>plot<span class="pl-pds">"</span></span>);
+
+  <span class="pl-k">var</span> plotter <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>();</pre></div>
+
+<p>Второй график можно создать также, как и первый:</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-k">var</span> plotter2 <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>();</pre></div>
+
+<p>Кроме того, в метод можно передавать опции, как это делает с конструктором Plotter:</p>
+
+<div class="highlight highlight-javascript"><pre> <span class="pl-k">var</span> plotter3 <span class="pl-k">=</span> container.<span class="pl-c1">addPlot</span>({
+width<span class="pl-k">:</span> <span class="pl-c1">400</span>,
+height<span class="pl-k">:</span> <span class="pl-c1">400</span>
+});</pre></div>
+
+<h1><a id="user-content-Примеры" class="anchor" href="#Примеры" aria-hidden="true"><span class="octicon octicon-link"></span></a>Примеры</h1>
+
+<p>Их можно посмотреть в папке scripts. В index.html можно менять имя подключаемого файла, чтобы смотреть разные примеры.</p>
+</div></article>
+
+<footer class="page-footer light-blue lighten-3">
+    <div class="container">
+        <div class="row">
+            <div class="col offset-l1 l5 m8 s12">
+                <img class="responsive-img" src="img/hselogo.jpg"/>
+            </div>
+            <div class="col l5 offset-l1 m4 s12">
+                <p>
+                    Проект разрабатывается преподавателями, сотрудниками и
+                    студентами НИУ ВШЭ.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+<script src="/js/jquery-2.1.4.min.js"></script>
+<script src="/materialize/js/materialize.min.js"></script>
+</body>
+</html>
